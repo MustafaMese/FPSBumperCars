@@ -1,11 +1,15 @@
 ﻿using EZCameraShake;
 using UnityEngine;
 
-public class PlayerController : IController
+public class PlayerController : Controller
 {
     //[SerializeField] PlayerCamera playerCamera;
     [SerializeField] BumperCar car;
     [SerializeField] VariableJoystick joystick;
+    [Space]
+    [SerializeField] Vector3 turnPower = new Vector3(0, 80, 0);
+    [SerializeField] float rotSpeed = 100f;
+    [SerializeField] float enginePower = 20;
 
     public override void Receive(RamDirection ramDirection)
     {
@@ -19,7 +23,7 @@ public class PlayerController : IController
         var x = joystick.Vertical;
         var z = joystick.Horizontal;
 
-        car.Move(x);
-        car.Turn(z);
+        car.Move(x, enginePower);
+        car.Turn(z, turnPower, rotSpeed);
     }
 }

@@ -2,7 +2,7 @@
 
 public class TriggerReceiver : MonoBehaviour
 {
-    [SerializeField] IController controller;
+    [SerializeField] Controller controller;
     [SerializeField] RamDirection ramDirection;
 
     private void OnTriggerEnter(Collider other) 

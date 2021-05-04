@@ -4,12 +4,8 @@ public class BumperCar : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform wheel;
-
+    [SerializeField] ControllerType controllerType;
     [Space]
-    [SerializeField] float rotSpeed;
-    [SerializeField] Vector3 turnPower;
-    [SerializeField] float enginePower;
-    [SerializeField] float maxTurnSpeed;
     [SerializeField] float ramPower;
 
     private bool canMove;
@@ -19,22 +15,23 @@ public class BumperCar : MonoBehaviour
         canMove = true;
     }
 
-    public void Move(float xAxis)
+    // TODO Geri gitmiyo.
+    public void Move(float xAxis, float enginePower)
     {
         if(!canMove) return;
 
         if(xAxis > 0)
             rb.AddForce(transform.forward * xAxis * enginePower, ForceMode.Force);
         else if(xAxis < 0)
-            rb.AddForce(transform.forward * xAxis * (enginePower / 2), ForceMode.Force);
+            rb.AddForce(transform.forward * xAxis * (2 * enginePower / 3), ForceMode.Force);
     }
 
-    public void Turn(float zAxis)
+    public void Turn(float zAxis, Vector3 turnPower, float rotSpeed)
     {
         Quaternion deltaRotation = Quaternion.Euler(zAxis * turnPower * Time.deltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation);
 
-        WheelControl(zAxis);
+        WheelControl(zAxis, rotSpeed);
     }
 
     public bool Move(Vector3 targetPos, float movementSpeed, float approachDistance)
@@ -50,12 +47,6 @@ public class BumperCar : MonoBehaviour
         var rotation = Quaternion.LookRotation(direction);
         rb.MoveRotation(Quaternion.Slerp(transform.rotation, rotation, rotationSpeed));
         return Quaternion.Angle(rotation, transform.rotation) <= 0.1f;
-    }
-
-    private void Ram(Collider other)
-    {
-        Vector3 direction = GetDirection(transform.position, other.transform.position);
-        other.GetComponent<Rigidbody>().AddForce(direction * ramPower, ForceMode.Force);
     }
 
     public void Ram(RamDirection ramDirection)
@@ -85,12 +76,7 @@ public class BumperCar : MonoBehaviour
         return direction;
     }
 
-    private void SetMovement(bool canMove)
-    {
-        this.canMove = canMove;
-    }
-
-    private void WheelControl(float zAxis)
+    private void WheelControl(float zAxis, float rotSpeed)
     {
         if(zAxis != 0)
         {
@@ -104,15 +90,21 @@ public class BumperCar : MonoBehaviour
             var angle = wheel.eulerAngles;
             angle.z = Mathf.Lerp(angle.z, 50, Time.deltaTime * rotSpeed / 4);
             wheel.eulerAngles = angle;
-        }
-            
+        } 
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.tag == "Car")
-    //     {
-    //         Ram(other);
-    //     }
-    // }
+    private void OnTriggerEnter(Collider other) 
+    {
+        if(other.tag == "Dedector")
+        {
+            if(controllerType == ControllerType.PLAYER)
+                UIManager.Instance.OpenEndCanvas(true);
+            else
+            {
+                gameObject.SetActive(false);
+                UIManager.Instance.UpdateScore();
+            }
+               
+        }    
+    }
 }

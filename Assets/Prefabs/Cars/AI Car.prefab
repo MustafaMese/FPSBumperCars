@@ -349,9 +349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 5117614446696326982}
   wheel: {fileID: 4895858280410515347}
-  turnPower: {x: 0, y: 0, z: 0}
-  enginePower: 15
-  maxTurnSpeed: 360
+  controllerType: 1
   ramPower: 150
 --- !u!114 &7630937480684343294
 MonoBehaviour:
@@ -365,6 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee0c99128d3e854782f94e99df0c04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controllerType: 1
   mask:
     serializedVersion: 2
     m_Bits: 256
@@ -372,7 +371,7 @@ MonoBehaviour:
   rotationSpeed: 0.06
   movementSpeed: 5
   approachDistance: 2
-  idleTime: 0.3
+  idleTime: 0.15
 --- !u!1001 &4106784980959607194
 PrefabInstance:
   m_ObjectHideFlags: 0
